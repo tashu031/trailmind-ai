@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+backend/.venv/
+
+# Build output
+frontend/dist/
+dist/
+build/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

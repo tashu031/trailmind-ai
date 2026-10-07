@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  # ─── TrailMind AI Backend ──────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: trailmind-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=development
+      - PORT=8000
+      - HOST=0.0.0.0
+      # Local AI: Point to host machine's Ollama (running outside Docker)
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - GEMMA_MODEL=gemma2:2b
+      - GEMMA_VISION_MODEL=paligemma
+      - AI_TIMEOUT_SECONDS=30.0
+      # Optional — leave blank to use in-memory store
+      - MONGODB_URI=${MONGODB_URI:-}
+      - MONGODB_DB_NAME=${MONGODB_DB_NAME:-trailmind_db}
+      # Optional monitoring / integrations
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY:-}
+      - CLOUD_AI_PROVIDER=${CLOUD_AI_PROVIDER:-none}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+
+  # ─── TrailMind AI Frontend ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: trailmind-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  # No persistent volumes needed — IndexedDB is client-side, MongoDB is optional cloud

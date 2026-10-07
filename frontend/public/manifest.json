@@ -1,0 +1,17 @@
+{
+  "short_name": "TrailMind",
+  "name": "TrailMind AI — Outdoor Companion",
+  "icons": [
+    {
+      "src": "/leaf.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FAF8F5",
+  "theme_color": "#2D5A27",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "description": "Plan less. Explore more. AI that helps you leave the screen."
+}
