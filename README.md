@@ -6,8 +6,9 @@
 
 [![Hacktoberfest 2026](https://img.shields.io/badge/Hacktoberfest-2026-orange?style=flat-square)](https://hacktoberfest.com)
 [![DEV Challenge: TOUCH GRASS](https://img.shields.io/badge/DEV%20Challenge-TOUCH%20GRASS-2D5A27?style=flat-square)](https://dev.to)
-[![Open AI](https://img.shields.io/badge/AI-Gemma%20Open--Weight-3A7D44?style=flat-square)](https://huggingface.co/google/gemma-2-2b)
+[![Open-Weight AI](https://img.shields.io/badge/AI-Gemma%20Open--Weight-3A7D44?style=flat-square)](https://huggingface.co/google/gemma-2-2b)
 [![Offline First](https://img.shields.io/badge/Offline-First-forest?style=flat-square)](https://web.dev/offline-first/)
+[![Deployed on Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=flat-square)](https://render.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 *Plan less. Explore more.*
@@ -16,477 +17,1066 @@
 
 ---
 
-## The Problem
+## 🌿 What is TrailMind AI?
 
-Every AI application in 2026 is designed to maximize screen time. Notifications pull you back. Infinite feeds keep you scrolling. AI chatbots encourage longer, more dependent conversations.
+TrailMind AI is an AI-powered outdoor adventure companion built around one simple idea:
 
-**TrailMind is the opposite.**
+> **AI should help you spend less time with AI.**
 
-TrailMind uses open-weight Gemma AI to get you **away from the screen** — generating personalized outdoor micro-missions, then intentionally fading into the background while you explore the real world.
+Instead of creating another chatbot that keeps users staring at a screen, TrailMind uses open-weight Gemma AI to create short, personalized outdoor missions that encourage people to walk, explore, observe, and reflect.
 
----
+The app transforms an ordinary walk, garden visit, hike, or outdoor break into a small mindful adventure.
 
-## The Core Loop
-
-```
-PLAN (30 seconds on screen)
-     ↓
-EXPLORE (95%+ of time screen-free)
-     ↓
-REFLECT (3 short questions)
-     ↓
-JOURNAL (AI-written, yours to keep)
-```
+The experience is intentionally designed so users spend only a short amount of time planning with the application and the majority of the experience away from the screen.
 
 ---
 
-## Features
+## 🎯 Hacktoberfest 2026 — TOUCH GRASS
+
+TrailMind AI was created for the Hacktoberfest 2026 DEV Open-Source AI Challenge — Week 1: TOUCH GRASS.
+
+TrailMind directly addresses the challenge theme by reversing the typical AI interaction model.
+
+Traditional AI:
+
+    User → AI → More Screen Time → More Usage
+
+TrailMind AI:
+
+    User → AI → Outdoor Mission → Leave the Screen → Explore → Reflect → Return & Journal
+
+The goal is not to maximize AI usage.
+
+The goal is to make AI useful enough that you can close the app and go outside.
+
+---
+
+## 🧠 The Core Loop
+
+    PLAN
+    ~30 seconds on screen
+          ↓
+    EXPLORE
+    Screen-free outdoor time
+          ↓
+    REFLECT
+    3 short questions
+          ↓
+    JOURNAL
+    AI-generated memory
+
+The AI is intentionally front-loaded.
+
+It helps plan the experience, then gets out of the way.
+
+---
+
+## ✨ Features
 
 | Feature | Description |
 |---|---|
-| 🗺️ **Outside Mission Generator** | Gemma creates personalized sensory outdoor missions from your preferences |
-| 📵 **Screen Down Mode** | Ultra-minimal high-contrast outdoor interface designed to stay closed |
-| 🔍 **Nature Detective** | Educational AI identification of plants, birds, rocks, and ecology |
-| 📷 **Observation Capture** | Offline-first photo, note, and mood logging |
-| ⏱️ **Sensory Timers** | Built-in 60-second pause timers for mindful observation |
-| 📖 **Adventure Journal** | Gemma-written narrative journal from your observations and reflections |
-| 🧠 **AI Memory** | Query past adventures with natural language |
-| 📊 **Outside Score** | Non-competitive mindful engagement metric (not a fitness tracker) |
-| 📡 **100% Offline** | PWA + IndexedDB + offline AI fallback engine |
-| 🔒 **Privacy First** | All observations stay on your device by default |
-| 🖥️ **AI Transparency Panel** | Live view of which AI provider is running and inference latency |
+| 🗺️ Outside Mission Generator | Creates personalized outdoor missions based on time, location, activity, difficulty, and interests |
+| 📵 Screen Down Mode | Minimal high-contrast interface designed to encourage users to stop looking at the screen |
+| 🔍 Nature Detective | Educational identification and explanation of plants, birds, rocks, sounds, and outdoor observations |
+| 📷 Observation Capture | Record notes, photos, moods, and discoveries while exploring |
+| ⏱️ Sensory Timers | Short observation and mindfulness timers for intentional outdoor pauses |
+| 📖 Adventure Journal | Turns observations and reflections into a personalized adventure story |
+| 🧠 AI Memory | Allows users to query and revisit previous adventures |
+| 📊 Outside Score | A non-competitive mindful engagement metric rather than a fitness score |
+| 📡 Offline-First Experience | PWA, IndexedDB, service worker, and offline fallback engine |
+| 🔒 Privacy First | Outdoor observations remain local by default |
+| 🖥️ AI Transparency Panel | Shows the active AI provider, runtime mode, inference information, and system status |
+| 🎬 Demo Mode | Canonical Jaipur outdoor adventure for judges and demonstrations |
+| 🛡️ Outdoor Safety Guidance | Built-in reminders around paths, weather, wildlife, and unknown plants |
 
 ---
 
-## Why Open AI Matters
+## 🤖 Open-Weight AI Architecture
 
-TrailMind is built on three open-AI principles:
+Open AI is not just an add-on in TrailMind.
 
-### 1. Local Inference via Gemma + Ollama
-```
-Your observations → Your device → Gemma (local) → Your journal
-                                      ↑
-                               Zero cloud leakage
-```
+The application was designed around an AI provider abstraction so that the core application does not depend on a single proprietary AI API.
 
-Forest trails rarely have reliable cellular signal. Closed AI APIs fail when you need them most. Gemma runs directly on your laptop or phone edge with Ollama — no API key, no rate limits, no internet required.
+    TrailMind AI
+         │
+         ▼
+    AIProviderFactory
+         │
+    ┌────┼──────────────┐
+    │    │              │
+    ▼    ▼              ▼
+    Local Gemma    Cloud Provider    Fallback Engine
+    + Ollama         Optional         Offline Rules
+    │                  │                 │
+    ▼                  ▼                 ▼
+    Primary       User Configured    Always Available
 
-### 2. Absolute User Privacy
-Your outdoor photos, GPS observations, plant identifications, and personal reflections **never leave your device** by default. When MongoDB Atlas is configured, cloud sync is an opt-in enhancement, not a prerequisite.
+### 1. Local Gemma — Primary AI
 
-### 3. Model Flexibility
-The `AIProvider` abstraction supports swapping models without touching application logic:
-- `LocalGemmaProvider` → Ollama (default, recommended)
-- `OptionalCloudProvider` → OpenAI-compatible endpoints (vLLM, HuggingFace TGI, Groq)
-- `FallbackRuleEngine` → Offline procedural engine (zero dependencies)
+The recommended configuration runs an open-weight Gemma model locally through Ollama.
+
+    User
+      │
+      ▼
+    TrailMind
+      │
+      ▼
+    LocalGemmaProvider
+      │
+      ▼
+    Ollama
+      │
+      ▼
+    Gemma
+
+Typical local configuration:
+
+    OLLAMA_BASE_URL=http://localhost:11434
+    GEMMA_MODEL=gemma2:2b
+
+Local inference means that outdoor observations can be processed without automatically sending them to a cloud AI provider.
+
+### 2. Optional Hosted AI Provider
+
+TrailMind also supports an optional OpenAI-compatible/cloud provider abstraction.
+
+This allows users or deployments to configure a hosted Gemma-compatible endpoint when local inference is not available.
+
+The application logic remains independent of the provider.
+
+### 3. Offline Rule Engine
+
+TrailMind also contains a zero-dependency fallback engine.
+
+This is especially important for outdoor use.
+
+If the local model or hosted provider is unavailable, the application can continue operating using the offline procedural engine.
+
+    Gemma unavailable
+          ↓
+    Offline Rule Engine
+          ↓
+    Mission still works
+
+This makes the application resilient instead of completely dependent on network connectivity or an external AI API.
 
 ---
 
-## AI Architecture
+## 🔐 Privacy by Design
 
-```
-AIProviderFactory
-├── 1. LocalGemmaProvider (Ollama/HTTP) ← Primary: zero cloud cost
-├── 2. OptionalCloudProvider (OpenAI-compatible) ← Optional: user-configured
-└── 3. FallbackRuleEngine ← Always available: offline/demo mode
-```
+TrailMind is designed around a local-first philosophy.
 
-### AI-Powered Workflows
+By default:
 
-| Workflow | Function | Prompt Template |
+    Outdoor Observation
+            ↓
+          Device
+            ↓
+      Local Storage / AI
+
+The application does not require a cloud database or cloud AI provider for its core experience.
+
+Optional cloud services can be configured when required.
+
+### Default storage architecture
+
+- IndexedDB on the client
+- In-memory backend fallback
+- Optional MongoDB Atlas persistence
+
+### Optional integrations
+
+- MongoDB Atlas
+- Sentry
+- ElevenLabs
+- Hosted Gemma-compatible AI providers
+
+Cloud integrations are optional rather than mandatory.
+
+---
+
+## 🧩 AI-Powered Workflows
+
+TrailMind uses AI in several meaningful parts of the experience.
+
+| Workflow | Function | Purpose |
 |---|---|---|
-| Mission Generation | `generateMission()` | `MISSION_USER_PROMPT_TEMPLATE` |
-| Observation Analysis | `analyzeObservation()` | `OBSERVATION_USER_PROMPT_TEMPLATE` |
-| Journal Creation | `generateJournal()` | `JOURNAL_USER_PROMPT_TEMPLATE` |
-| Memory Synthesis | `queryMemory()` | `MEMORY_USER_PROMPT_TEMPLATE` |
+| Mission Generation | `generateMission()` | Creates a personalized outdoor adventure |
+| Mission Regeneration | `regenerateMission()` | Produces a fresh variation |
+| Observation Analysis | `analyzeObservation()` | Provides educational nature analysis |
+| Journal Creation | `generateJournal()` | Converts reflections into an adventure journal |
+| Memory | `queryMemory()` | Retrieves meaningful information from past adventures |
+| Voice | `speak()` | Provides optional outdoor narration |
 
-All prompts live in [`backend/app/ai/prompts.py`](backend/app/ai/prompts.py) — never embedded in React components.
+All AI prompt templates are centralized in:
+
+    backend/app/ai/prompts.py
+
+This keeps AI behavior separated from the React UI.
 
 ---
 
-## Tech Stack
+## 🏗️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | React 18, Vite, TypeScript, Tailwind CSS |
-| **Backend** | Python 3.12+, FastAPI, Pydantic v2 |
-| **AI Engine** | Gemma (open-weight), Ollama (local runtime) |
-| **Local Storage** | IndexedDB (idb), Service Worker, PWA |
-| **Optional Cloud DB** | MongoDB Atlas (via Motor async driver) |
-| **Optional Monitoring** | Sentry SDK (frontend + backend traces) |
-| **Optional Voice** | ElevenLabs TTS (falls back to Web Speech API) |
-| **Maps** | Leaflet + OpenStreetMap (optional, no API key) |
-| **Testing** | Vitest (frontend), Pytest (backend) |
-| **Deployment** | Render (backend Web Service + frontend Static Site) |
-| **CI/CD** | GitHub Actions |
+| Frontend | React 18, Vite, TypeScript, Tailwind CSS |
+| Backend | Python 3.12+, FastAPI, Pydantic |
+| AI | Google Gemma open-weight models |
+| Local AI Runtime | Ollama |
+| Local Storage | IndexedDB |
+| Offline Support | Service Worker + PWA |
+| Optional Database | MongoDB Atlas |
+| Optional Monitoring | Sentry |
+| Optional Voice | ElevenLabs + Web Speech API |
+| Maps | Leaflet + OpenStreetMap |
+| Testing | Vitest + Pytest |
+| Deployment | Render |
+| CI/CD | GitHub Actions |
+| Containerization | Docker |
 
 ---
 
-## Installation
+## 📁 Project Structure
+
+    trailmind-ai/
+    │
+    ├── frontend/
+    │   ├── src/
+    │   │   ├── components/
+    │   │   │   ├── ConnectionBadge.tsx
+    │   │   │   ├── DevPanelModal.tsx
+    │   │   │   ├── Header.tsx
+    │   │   │   ├── NatureDetectiveModal.tsx
+    │   │   │   ├── ObservationModal.tsx
+    │   │   │   ├── SafetyBanner.tsx
+    │   │   │   ├── ScreenDownOverlay.tsx
+    │   │   │   ├── ShareCardModal.tsx
+    │   │   │   └── TimerWidget.tsx
+    │   │   │
+    │   │   ├── pages/
+    │   │   │   ├── LandingPage.tsx
+    │   │   │   ├── OnboardingPage.tsx
+    │   │   │   ├── MissionPreviewPage.tsx
+    │   │   │   ├── MissionModePage.tsx
+    │   │   │   ├── AdventureCompletionPage.tsx
+    │   │   │   ├── JournalViewPage.tsx
+    │   │   │   └── HistoryPage.tsx
+    │   │   │
+    │   │   ├── services/
+    │   │   │   ├── api.ts
+    │   │   │   ├── db.ts
+    │   │   │   └── speech.ts
+    │   │   │
+    │   │   ├── types/
+    │   │   │   └── index.ts
+    │   │   │
+    │   │   └── App.tsx
+    │   │
+    │   └── public/
+    │       ├── sw.js
+    │       └── manifest.json
+    │
+    ├── backend/
+    │   └── app/
+    │       ├── ai/
+    │       │   ├── base.py
+    │       │   ├── local_gemma.py
+    │       │   ├── cloud_provider.py
+    │       │   ├── fallback_engine.py
+    │       │   ├── factory.py
+    │       │   ├── prompts.py
+    │       │   └── json_utils.py
+    │       │
+    │       ├── api/
+    │       │   └── endpoints.py
+    │       │
+    │       ├── services/
+    │       ├── schemas/
+    │       ├── database/
+    │       │   └── mongo.py
+    │       │
+    │       └── main.py
+    │
+    ├── docs/
+    ├── .github/
+    │   └── workflows/
+    │       └── ci.yml
+    │
+    ├── docker-compose.yml
+    ├── render.yaml
+    ├── .env.example
+    ├── architecture.md
+    └── README.md
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js** 20+ and npm
-- **Python** 3.12+
-- **Ollama** (for local Gemma inference) — optional but strongly recommended
+Install:
+
+- Node.js 20+
+- npm
+- Python 3.12+
+- Git
+- Ollama (optional but recommended for local Gemma inference)
 
 ### 1. Clone the Repository
 
-```bash
-git clone https://github.com/yourusername/trailmind-ai.git
-cd trailmind-ai
-```
-
-### 2. Configure Environment
-
-```bash
-cp .env.example .env
-# Edit .env with your optional integrations (MongoDB, Sentry, ElevenLabs)
-# Default works with zero configuration — Ollama is optional
-```
+    git clone https://github.com/tashu031/trailmind-ai.git
+    cd trailmind-ai
 
 ---
 
-## Local Gemma Setup (Recommended)
+## ⚙️ Environment Configuration
 
-TrailMind works immediately without Gemma via the offline fallback engine.  
-For full AI-powered mission generation, set up local Gemma:
+Create your environment file:
 
-```bash
-# 1. Download and install Ollama
-# macOS/Linux:
-curl -fsSL https://ollama.com/install.sh | sh
-# Windows: https://ollama.com/download
+    cp .env.example .env
 
-# 2. Pull the Gemma 2 model (2B parameter, ~1.5GB)
-ollama pull gemma2:2b
+Example configuration:
 
-# 3. Start Ollama (it will serve on http://localhost:11434)
-ollama serve
+    APP_ENV=development
+    PORT=8000
+    HOST=0.0.0.0
 
-# 4. Verify it's running
-curl http://localhost:11434/api/tags
-```
+    OLLAMA_BASE_URL=http://localhost:11434
+    GEMMA_MODEL=gemma2:2b
+    GEMMA_VISION_MODEL=paligemma
+    AI_TIMEOUT_SECONDS=30.0
 
-TrailMind will automatically detect the running Ollama instance and switch from the fallback engine to local Gemma inference.
+    CLOUD_AI_PROVIDER=none
+    CLOUD_AI_API_KEY=
+    CLOUD_AI_BASE_URL=https://api.openai.com/v1
+    CLOUD_AI_MODEL=google/gemma-2-9b-it
 
-### Alternative: Larger Models
+    MONGODB_URI=
+    MONGODB_DB_NAME=trailmind_db
 
-```bash
-ollama pull gemma2:9b     # Better quality, needs ~6GB RAM
-ollama pull gemma3:4b     # Latest Gemma 3 family
-```
+    SENTRY_DSN=
 
-Update `GEMMA_MODEL` in `.env` to match your chosen model.
+    ELEVENLABS_API_KEY=
+    ELEVENLABS_VOICE_ID=21m00Tcm4TlvD8q8ikWAM
 
----
+Most optional integrations can remain empty.
 
-## Backend Setup
-
-```bash
-# Create virtual environment
-cd backend
-python -m venv .venv
-
-# Activate (Windows)
-.venv\Scripts\activate
-# Activate (macOS/Linux)
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run development server
-uvicorn app.main:app --reload --port 8000
-# API available at: http://localhost:8000
-# Swagger docs: http://localhost:8000/docs
-```
-
-### Backend Environment Variables
-
-Copy `.env.example` to `backend/.env` or set system environment variables:
-
-```
-OLLAMA_BASE_URL=http://localhost:11434  # Ollama API
-GEMMA_MODEL=gemma2:2b                  # Model name in Ollama
-MONGODB_URI=                           # Optional: MongoDB Atlas connection string
-SENTRY_DSN=                            # Optional: Sentry DSN for monitoring
-ELEVENLABS_API_KEY=                    # Optional: ElevenLabs voice synthesis
-```
+TrailMind is designed to work without them.
 
 ---
 
-## Frontend Setup
+## 🦙 Local Gemma Setup with Ollama
 
-```bash
-cd frontend
-npm install
-npm run dev       # Development server at http://localhost:5173
-```
+For the full local AI experience, install Ollama.
 
-The Vite dev server proxies `/api/*` to `http://localhost:8000`.
+### 1. Install Ollama
 
----
+Download it from:
 
-## MongoDB Atlas Setup (Optional)
+https://ollama.com
 
-MongoDB is optional. Without it, TrailMind uses in-memory storage on the backend and IndexedDB on the client.
+### 2. Pull Gemma
 
-1. Create a free cluster at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Get your connection string (Atlas → Connect → Drivers → Python)
-3. Set in `.env`: `MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/`
+    ollama pull gemma2:2b
 
-Collections created automatically:
-- `adventures`
-- `observations`
+### 3. Start Ollama
 
----
+    ollama serve
 
-## Sentry Setup (Optional)
+### 4. Verify Ollama
 
-1. Create a project at [sentry.io](https://sentry.io)
-2. Get your DSN from Project Settings → Client Keys
-3. Set in `.env`: `SENTRY_DSN=https://xxxxx@sentry.io/xxxxx`
+    curl http://localhost:11434/api/tags
 
-Traces captured around:
-- `generateMission()` — AI mission generation latency
-- `analyzeObservation()` — Nature Detective inference
-- `generateJournal()` — Journal synthesis performance
+### 5. Run Gemma
+
+    ollama run gemma2:2b
+
+TrailMind will detect the local Ollama endpoint and use Gemma when available.
 
 ---
 
-## ElevenLabs Setup (Optional)
+## 🐍 Backend Setup
 
-TrailMind works without ElevenLabs using the browser's built-in Web Speech API.
+Open a terminal:
 
-For premium natural outdoor narrator voice:
-1. Create an account at [elevenlabs.io](https://elevenlabs.io)
-2. Get your API key from Profile → API Keys
-3. Set in `.env`: `ELEVENLABS_API_KEY=your_key_here`
+    cd backend
 
-Falls back silently to Web Speech API if unconfigured.
+Create a virtual environment:
 
----
+    python -m venv .venv
 
-## Running Tests
+### Windows
 
-```bash
-# Backend tests
-cd backend
-.venv\Scripts\activate   # Windows
-pytest tests/ -v
+    .venv\Scripts\activate
 
-# Frontend tests
-cd frontend
-npm test
-```
+### macOS/Linux
 
----
+    source .venv/bin/activate
 
-## Production Build
+Install dependencies:
 
-```bash
-# Build frontend
-cd frontend && npm run build
+    pip install -r requirements.txt
 
-# Docker Compose (full stack)
-docker compose up --build
+Run the FastAPI backend:
 
-# Or deploy to Render using render.yaml
-```
+    uvicorn app.main:app --reload --port 8000
+
+Backend:
+
+    http://localhost:8000
+
+Swagger API documentation:
+
+    http://localhost:8000/docs
+
+Health endpoint:
+
+    http://localhost:8000/health
 
 ---
 
-## Render Deployment
+## ⚛️ Frontend Setup
 
-**Important:** On Render, local Ollama is not available. The backend will automatically use the `FallbackRuleEngine` (offline procedural generator) unless you configure `CLOUD_AI_PROVIDER` with a hosted Gemma endpoint.
+Open another terminal:
 
-1. Connect your GitHub repository to Render
-2. Render auto-detects `render.yaml` and creates both services
-3. Set secret environment variables in the Render dashboard:
-   - `MONGODB_URI` — MongoDB Atlas connection string
-   - `SENTRY_DSN` — Sentry DSN
-   - `ELEVENLABS_API_KEY` — ElevenLabs key
+    cd frontend
 
----
+Install dependencies:
 
-## Demo Mode
+    npm install
 
-TrailMind includes a canonical Hacktoberfest demo:
+Start the development server:
 
-**Location:** Jaipur City Forest & Smriti Van  
-**Duration:** 30 minutes  
-**Activity:** Urban Nature Detective  
-**Difficulty:** Easy
+    npm run dev
 
-Click **"Launch Jaipur Demo"** in the header or the landing page to experience the complete flow without requiring a real outdoor session.
+Frontend:
 
----
+    http://localhost:5173
 
-## Demo Script (Hacktoberfest Judging)
+During local development, Vite proxies API requests:
 
-```
-1. Open TrailMind at http://localhost:5173
-2. The landing page displays: "Your AI should help you leave the screen."
-3. Click "Launch Jaipur Demo"
-4. Mission Preview loads: "Jaipur Urban Nature Detective: The Ancient Canopy"
-5. Click "START ADVENTURE" → enter Mission Mode
-6. Notice the minimal interface — no chat, no feed, no distractions
-7. Click "Screen Down Mode" → full-screen high-contrast outdoor UI
-8. Complete a checkpoint → tap "I've Completed This Checkpoint"
-9. Click "Capture Observation" → add a mindful nature note
-10. Click "Nature Detective" → see educational AI identification
-11. Disconnect from WiFi → offline banner appears, mission continues
-12. Complete all checkpoints → "Adventure Complete"
-13. Answer 3 short reflection questions
-14. Generate Adventure Journal → Gemma writes a narrative story
-15. Open Settings (gear icon) → AI Transparency Panel
-16. Verify: "LOCAL AI (GEMMA)" badge shows active Gemma status
-17. Show Outside Score: 87/100 — non-competitive mindful engagement
-18. Open Adventure History → past adventures with AI Memory search
-```
+    Frontend :5173
+          │
+          │ /api/*
+          ▼
+    Backend :8000
 
 ---
 
-## API Endpoints
+## 🧪 Testing
 
-| Method | Path | Description |
+### Backend
+
+    cd backend
+    pytest tests/ -v
+
+### Frontend
+
+    cd frontend
+    npm test
+
+### Production Frontend Build
+
+    cd frontend
+    npm run build
+
+The production build is generated inside:
+
+    frontend/dist/
+
+---
+
+## 🐳 Docker
+
+TrailMind also includes Docker support.
+
+Run the full stack:
+
+    docker compose up --build
+
+Stop the containers:
+
+    docker compose down
+
+---
+
+## ☁️ Render Deployment
+
+TrailMind is deployed using Render with two services:
+
+    Render
+       │
+       ├── Static Frontend
+       │   trailmind-frontend
+       │
+       └── FastAPI Backend
+           trailmind-backend
+
+The deployment configuration is stored in:
+
+    render.yaml
+
+The project uses:
+
+- Render Static Site for the React frontend
+- Render Web Service for the FastAPI backend
+
+The deployed application can therefore be accessed without running the development servers locally.
+
+---
+
+## ⚠️ AI Behavior on Render
+
+Local Ollama is intentionally designed for the user's own machine and is not available inside the Render deployment environment.
+
+Therefore, the deployed version uses the following architecture:
+
+Local Development:
+
+    React
+      ↓
+    FastAPI
+      ↓
+    Ollama
+      ↓
+    Gemma
+
+Render Deployment:
+
+    React
+      ↓
+    FastAPI
+      ↓
+    Offline Rule Engine
+
+If a hosted Gemma-compatible provider is configured, the Render backend can use that provider instead.
+
+This keeps the deployed application resilient while preserving the project's primary open-weight AI architecture.
+
+---
+
+## 🎬 Hacktoberfest Demo Mode
+
+TrailMind includes a canonical demonstration experience designed for Hacktoberfest judging.
+
+### Demo Location
+
+Jaipur City Forest & Smriti Van
+
+### Demo Duration
+
+30 minutes
+
+### Activity
+
+Urban Nature Detective
+
+### Difficulty
+
+Easy
+
+The application includes a Demo Mode so the complete product experience can be demonstrated without requiring the judge to physically complete an outdoor adventure.
+
+---
+
+## 🧭 Suggested Demo Flow
+
+    1. Open TrailMind AI
+
+    2. Click "Launch Jaipur Demo"
+
+    3. Review the personalized mission
+
+    4. Click "START ADVENTURE"
+
+    5. Enter Mission Mode
+
+    6. Enable Screen Down Mode
+
+    7. Complete a checkpoint
+
+    8. Capture an outdoor observation
+
+    9. Open Nature Detective
+
+    10. Complete the remaining checkpoints
+
+    11. Finish the adventure
+
+    12. Answer the reflection questions
+
+    13. Generate the Adventure Journal
+
+    14. Open the AI Transparency Panel
+
+    15. View the Outside Score
+
+    16. Open Adventure History
+
+The most important part of the demo is the transition:
+
+    AI interaction
+          ↓
+    Mission generated
+          ↓
+    Screen goes down
+          ↓
+    User explores the real world
+          ↓
+    User returns to reflect
+
+---
+
+## 🖥️ AI Transparency Panel
+
+TrailMind includes an AI Transparency & Developer Panel.
+
+It exposes the active AI architecture instead of hiding it behind a generic "AI powered" label.
+
+The panel can display:
+
+    AI ENGINE
+    Gemma
+
+    RUNTIME MODE
+    Offline Rule Engine / Local Gemma
+
+    NETWORK STATE
+    Online / Offline
+
+    INFERENCE LATENCY
+    Measured runtime information
+
+    PROVIDER PIPELINE
+    1. Local Gemma
+    2. Optional Cloud Provider
+    3. Offline Rule Engine
+
+This makes the open-weight architecture visible to developers and users.
+
+---
+
+## 🌲 Outside Score
+
+TrailMind intentionally does not try to become another fitness tracker.
+
+The Outside Score is a mindful engagement metric.
+
+It can consider signals such as:
+
+- Time spent outside
+- Sensory observations
+- Completed checkpoints
+- Reflections
+- Exploration activity
+
+It is explicitly:
+
+> Not a fitness score.
+
+The goal is to encourage mindful engagement rather than competition.
+
+---
+
+## 📡 Offline-First Architecture
+
+Outdoor environments can have unreliable connectivity.
+
+TrailMind therefore follows an offline-first approach.
+
+    TrailMind
+       │
+       ├── Online
+       │      ↓
+       │    FastAPI
+       │      ↓
+       │    AI Providers
+       │
+       └── Offline
+              ↓
+          IndexedDB
+              ↓
+       Offline Engine
+              ↓
+       User Experience
+
+The application can continue providing its core outdoor experience even when network-dependent AI services are unavailable.
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
 |---|---|---|
-| GET | `/health` | Health check + AI status |
-| POST | `/api/mission/generate` | Generate outdoor mission with Gemma |
-| POST | `/api/mission/regenerate` | Regenerate a fresh mission variation |
-| POST | `/api/observation/analyze` | Nature Detective AI analysis |
-| POST | `/api/journal/generate` | Generate Adventure Journal |
+| GET | `/health` | Backend health and AI status |
+| POST | `/api/mission/generate` | Generate an outdoor mission |
+| POST | `/api/mission/regenerate` | Generate a fresh mission variation |
+| POST | `/api/observation/analyze` | Analyze an outdoor observation |
+| POST | `/api/journal/generate` | Generate an Adventure Journal |
 | GET | `/api/adventures` | List adventure history |
-| GET | `/api/adventures/{id}` | Get specific adventure |
-| POST | `/api/adventures` | Save adventure to cloud |
-| POST | `/api/observations` | Save observation |
-| GET | `/api/ai/status` | Live AI provider status + telemetry |
-| POST | `/api/ai/memory` | Query past adventures with Gemma |
-| POST | `/api/voice/speak` | ElevenLabs TTS narration |
+| GET | `/api/adventures/{id}` | Get a specific adventure |
+| POST | `/api/adventures` | Save an adventure |
+| POST | `/api/observations` | Save an observation |
+| GET | `/api/ai/status` | Get AI provider status |
+| POST | `/api/ai/memory` | Query adventure memory |
+| POST | `/api/voice/speak` | Optional voice narration |
 
-Full interactive docs at `/docs` (Swagger UI) when backend is running.
+Interactive API documentation:
 
----
-
-## Project Structure
-
-```
-trailmind-ai/
-├── frontend/
-│   ├── src/
-│   │   ├── components/        # Shared UI components
-│   │   │   ├── ConnectionBadge.tsx
-│   │   │   ├── DevPanelModal.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── NatureDetectiveModal.tsx
-│   │   │   ├── ObservationModal.tsx
-│   │   │   ├── SafetyBanner.tsx
-│   │   │   ├── ScreenDownOverlay.tsx
-│   │   │   ├── ShareCardModal.tsx
-│   │   │   └── TimerWidget.tsx
-│   │   ├── pages/             # Full page views
-│   │   │   ├── LandingPage.tsx
-│   │   │   ├── OnboardingPage.tsx
-│   │   │   ├── MissionPreviewPage.tsx
-│   │   │   ├── MissionModePage.tsx
-│   │   │   ├── AdventureCompletionPage.tsx
-│   │   │   ├── JournalViewPage.tsx
-│   │   │   └── HistoryPage.tsx
-│   │   ├── services/          # API, storage, audio
-│   │   │   ├── api.ts         # Backend client + offline fallback generator
-│   │   │   ├── db.ts          # IndexedDB (idb) local storage
-│   │   │   └── speech.ts      # ElevenLabs + Web Speech + Web Audio chimes
-│   │   ├── types/index.ts     # TypeScript types
-│   │   └── App.tsx            # Root router
-│   └── public/
-│       ├── sw.js              # Service Worker for PWA offline
-│       └── manifest.json      # PWA manifest
-├── backend/
-│   └── app/
-│       ├── ai/                # AI provider abstraction
-│       │   ├── base.py        # AIProvider abstract base class
-│       │   ├── local_gemma.py # LocalGemmaProvider (Ollama)
-│       │   ├── cloud_provider.py # OptionalCloudProvider
-│       │   ├── fallback_engine.py # Offline rule engine + demo
-│       │   ├── factory.py     # AIProviderFactory (routing + fallback)
-│       │   ├── prompts.py     # All Gemma prompt templates
-│       │   └── json_utils.py  # JSON extraction + repair from LLM output
-│       ├── api/endpoints.py   # FastAPI route handlers
-│       ├── services/          # Business logic layer
-│       ├── schemas/           # Pydantic v2 models
-│       ├── database/mongo.py  # MongoDB Atlas + in-memory fallback
-│       └── main.py            # FastAPI application
-├── docs/                      # Architecture and setup documentation
-├── .github/workflows/ci.yml   # GitHub Actions CI/CD
-├── docker-compose.yml         # Full-stack Docker setup
-├── render.yaml                # Render.com deployment config
-├── .env.example               # Environment variable template
-└── README.md                  # This file
-```
+    /docs
 
 ---
 
-## Safety
+## 🗄️ Optional MongoDB Atlas
 
-TrailMind includes responsible outdoor safety guidelines throughout:
+MongoDB is optional.
 
-- ⚠️ Never advise users on medical or emergency decisions
-- 🍄 Never state that unknown plants, mushrooms, or berries are safe to consume
-- 🐾 Never encourage approaching wild animals
-- 🗺️ Always recommend staying on established public paths
-- 🌦️ Remind users to check local weather before heading out
-- 🚨 Nature Detective results are always labeled **Educational Identification Only**
+Without MongoDB:
 
----
+    Client → IndexedDB
+    Backend → In-memory storage
 
-## Known Limitations
+With MongoDB:
 
-1. **Ollama required for full local AI** — the offline engine provides solid fallback but real Gemma inference requires Ollama installation
-2. **No native camera API in PWA** — uses `<input type="file" capture="environment">` which works on most mobile browsers
-3. **Render free tier** — the backend may cold-start after inactivity; first request may take 30–60 seconds
-4. **Vision model** — multimodal Nature Detective requires `paligemma` or `llava` in Ollama; text-only analysis works without it
+    Client
+       ↓
+    FastAPI
+       ↓
+    MongoDB Atlas
 
----
+Set:
 
-## Future Improvements
+    MONGODB_URI=your_mongodb_connection_string
+    MONGODB_DB_NAME=trailmind_db
 
-- [ ] React Native / Capacitor mobile app for better GPS and camera integration
-- [ ] Vector search via MongoDB Atlas for semantic memory queries
-- [ ] Trail mapping with Leaflet + OpenStreetMap route generation
-- [ ] Seasonal mission packs (spring foraging, winter tracking, storm watching)
-- [ ] Community mission sharing (open-source, no social feed)
-- [ ] Accessibility: voice-only mission mode for visual impairment
+The application can continue operating without MongoDB.
 
 ---
 
-## Why Open AI Matters — The Honest Version
+## 📊 Optional Sentry Monitoring
 
-Commercial AI APIs are powerful, but they create dependency:
+Sentry can be configured for monitoring and telemetry.
 
-| Closed API | Open Gemma + Ollama |
+Set:
+
+    SENTRY_DSN=your_sentry_dsn
+
+Relevant workflows include:
+
+- Mission generation
+- Observation analysis
+- Journal generation
+
+Monitoring is optional and does not affect the core offline-first architecture.
+
+---
+
+## 🔊 Optional ElevenLabs Voice
+
+TrailMind can optionally use ElevenLabs for natural voice narration.
+
+Set:
+
+    ELEVENLABS_API_KEY=your_api_key
+    ELEVENLABS_VOICE_ID=your_voice_id
+
+If ElevenLabs is not configured, the application falls back to the browser's built-in Web Speech API.
+
+---
+
+## 🗺️ Maps
+
+TrailMind can use:
+
+- Leaflet
+- OpenStreetMap
+
+The mapping layer is designed to avoid requiring a proprietary map API key for the basic experience.
+
+---
+
+## 🛡️ Safety
+
+TrailMind includes responsible outdoor safety guidance.
+
+The application is designed to:
+
+- Encourage staying on established paths
+- Remind users to check weather conditions
+- Discourage approaching wild animals
+- Avoid claiming that unknown plants, mushrooms, or berries are safe to consume
+- Avoid medical or emergency decision-making
+- Clearly label Nature Detective results as educational
+
+### Nature Detective Disclaimer
+
+Nature identification is:
+
+> Educational Identification Only
+
+Users should not use TrailMind as a substitute for professional ecological, medical, or emergency advice.
+
+---
+
+## 🔒 Privacy Principles
+
+TrailMind follows these principles:
+
+### Local First
+
+Core functionality should not require a cloud account.
+
+### Optional Cloud
+
+Cloud persistence is opt-in.
+
+### Open Models
+
+The architecture supports open-weight AI rather than forcing users into one proprietary model provider.
+
+### Transparent AI
+
+The application exposes which AI runtime is being used.
+
+### Minimal Screen Time
+
+The application is intentionally designed to reduce screen interaction after the mission begins.
+
+---
+
+## 🧠 Why Open AI Matters
+
+TrailMind uses open-weight AI because the project's purpose is fundamentally connected to independence.
+
+A closed cloud-only AI experience would create a dependency on:
+
+- Internet connectivity
+- API keys
+- Cloud availability
+- Usage limits
+- Vendor infrastructure
+- Per-request costs
+
+TrailMind instead supports local Gemma inference.
+
+    Open-Weight AI
+          │
+          ├── Offline
+          │
+          ├── Privacy
+          │
+          └── Choice
+
+This is particularly meaningful for an application designed for outdoor environments where connectivity may be unreliable.
+
+---
+
+## ⚖️ Closed API vs Open-Weight AI
+
+| Closed Cloud AI | Open Gemma + Local Runtime |
 |---|---|
-| Requires internet | Works offline on trails |
-| Costs per token | Zero inference cost |
-| Sends private data to cloud | Data stays on device |
-| Vendor lock-in | Swap models freely |
-| Rate limited | No rate limits |
-| API key required | No account needed |
-
-For an application designed to get people outdoors and away from dependency on technology, building on closed AI would be philosophically inconsistent. TrailMind uses open AI because **open AI is the only kind that can actually help you leave the screen**.
+| Requires network | Can work offline |
+| Cloud dependency | Local inference possible |
+| API key required | No API key for local mode |
+| Usage limits | No cloud rate limits in local mode |
+| Data may leave device | Local processing can keep data on device |
+| Vendor-specific | Provider abstraction |
+| Cloud inference cost | Local inference has no per-token cloud cost |
 
 ---
 
-## License
+## 📱 Progressive Web App
 
-MIT License — open for contributions, forks, and extensions.
+TrailMind is designed as a Progressive Web App.
+
+It includes:
+
+- Service Worker
+- Offline support
+- IndexedDB storage
+- Installable web experience
+- Responsive UI
+- Mobile-friendly observation capture
+
+The application is designed to work across desktop and mobile browsers.
+
+---
+
+## 🧪 Current Validation
+
+The project has automated tests for both major application layers.
+
+### Frontend
+
+    Vitest
+    ✓ Component tests
+    ✓ Outside Score tests
+
+### Backend
+
+    Pytest
+    ✓ API endpoint tests
+    ✓ AI status tests
+    ✓ Mission generation tests
+    ✓ Observation analysis tests
+    ✓ Journal generation tests
+
+Production frontend builds successfully using:
+
+    npm run build
+
+---
+
+## 🛠️ Development Philosophy
+
+TrailMind follows several engineering principles:
+
+### Separation of Concerns
+
+Frontend UI, backend APIs, business logic, AI providers, and persistence are separated.
+
+### Provider Abstraction
+
+AI logic is implemented through provider interfaces instead of being tightly coupled to a single model.
+
+### Local-First
+
+The application remains useful even when optional cloud services are unavailable.
+
+### Progressive Enhancement
+
+Optional services improve the experience but do not define the core application.
+
+### Transparent AI
+
+The user can see what AI runtime is active.
+
+### Safety by Design
+
+Outdoor recommendations are constrained by safety guidance.
+
+---
+
+## 🚧 Known Limitations
+
+### 1. Local Gemma Requires Ollama
+
+Full local Gemma inference requires Ollama and a downloaded model.
+
+Without Ollama, TrailMind uses its offline fallback engine.
+
+### 2. Render Does Not Run Local Ollama
+
+The deployed Render environment uses the offline engine unless a hosted AI provider is configured.
+
+### 3. Render Free Tier
+
+The backend may experience cold starts after periods of inactivity.
+
+### 4. Vision Models
+
+Advanced multimodal Nature Detective functionality requires a compatible vision model/runtime.
+
+### 5. Browser Camera APIs
+
+Photo capture depends on browser support for camera-enabled file inputs.
+
+---
+
+## 🔮 Future Improvements
+
+Potential future work includes:
+
+- [ ] React Native / Capacitor mobile application
+- [ ] Better native GPS support
+- [ ] Advanced camera integration
+- [ ] MongoDB Atlas vector search for semantic memory
+- [ ] More advanced trail mapping
+- [ ] Seasonal outdoor mission packs
+- [ ] Community mission sharing
+- [ ] Voice-only mission mode
+- [ ] Improved multimodal Gemma integration
+- [ ] More offline AI model options
+- [ ] Personalized long-term outdoor habit insights
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+A typical workflow:
+
+    git clone https://github.com/tashu031/trailmind-ai.git
+
+    cd trailmind-ai
+
+    git checkout -b feature/your-feature
+
+Make your changes, test them, and create a pull request.
+
+Please keep contributions aligned with the project's core principles:
+
+- Outdoor-first
+- Privacy-first
+- Open AI
+- Offline resilience
+- Safety
+- Minimal screen time
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+See the `LICENSE` file for details.
+
+---
+
+## 🌱 The Bigger Idea
+
+Most AI products optimize for:
+
+    More prompts
+         ↓
+    More responses
+         ↓
+    More engagement
+         ↓
+    More screen time
+
+TrailMind tries to reverse that:
+
+    One useful AI interaction
+              ↓
+          Go outside
+              ↓
+            Explore
+              ↓
+           Observe
+              ↓
+           Reflect
+              ↓
+        Return briefly
+              ↓
+        Save the memory
+
+The best AI experience might not be the one that keeps you talking to AI the longest.
+
+It might be the one that gives you a reason to stop talking to it.
 
 ---
 
 <div align="center">
 
-*Built for Hacktoberfest 2026 DEV Challenge: TOUCH GRASS*
+## 🌿 TrailMind AI
 
-**"Most AI apps ask you to spend more time with AI. TrailMind uses AI to help you spend less time with AI."**
+**Plan less. Explore more.**
+
+**Your AI should help you leave the screen.**
+
+Built for **Hacktoberfest 2026 — DEV Challenge: TOUCH GRASS**
 
 </div>
