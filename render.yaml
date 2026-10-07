@@ -1,54 +1,92 @@
 # Render.com deployment configuration for TrailMind AI
-# https://render.com/docs/render-yaml-spec
+# https://render.com/docs/blueprint-spec
 
 services:
-  # ─── Backend API (Web Service) ─────────────────────────────────────────────
+
+  # ─── Backend API (FastAPI Web Service) ─────────────────────────────────────
   - type: web
     name: trailmind-backend
     runtime: python
     region: oregon
     plan: free
     rootDir: backend
+
     buildCommand: pip install -r requirements.txt
+
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
     healthCheckPath: /health
+
     envVars:
       - key: APP_ENV
         value: production
+
+      # Ollama is NOT available on Render.
+      # Backend automatically falls back to the Offline Rule Engine
+      # when local Ollama/Gemma is unavailable.
       - key: OLLAMA_BASE_URL
-        # NOTE: On Render, Ollama is NOT available. Backend serves the Offline Rule Engine
-        # and optionally the Cloud AI provider if configured.
         value: http://localhost:11434
+
       - key: GEMMA_MODEL
         value: gemma2:2b
+
       - key: AI_TIMEOUT_SECONDS
         value: "30.0"
+
+      # No cloud AI provider for the Render demo.
       - key: CLOUD_AI_PROVIDER
         value: none
+
+      # Optional MongoDB Atlas persistence
       - key: MONGODB_URI
-        sync: false   # Set in Render dashboard from MongoDB Atlas connection string
+        sync: false
+
       - key: MONGODB_DB_NAME
         value: trailmind_db
-      - key: SENTRY_DSN
-        sync: false   # Set in Render dashboard
-      - key: ELEVENLABS_API_KEY
-        sync: false   # Set in Render dashboard
 
-  # ─── Frontend Static Site ──────────────────────────────────────────────────
+      # Optional Sentry monitoring
+      - key: SENTRY_DSN
+        sync: false
+
+      # Optional ElevenLabs voice
+      - key: ELEVENLABS_API_KEY
+        sync: false
+
+
+  # ─── Frontend (React/Vite Static Site) ─────────────────────────────────────
   - type: web
     name: trailmind-frontend
     runtime: static
     rootDir: frontend
+
     buildCommand: npm ci && npm run build
+
     staticPublishPath: dist
+
+    # Service worker + static asset caching
     headers:
       - path: /sw.js
         name: Cache-Control
         value: no-store, no-cache, must-revalidate, max-age=0
+
       - path: /assets/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
+
+    # Production routing
     routes:
+
+      # Frontend API calls → FastAPI backend
+      - type: rewrite
+        source: /api/*
+        destination: https://trailmind-backend.onrender.com/api/*
+
+      # Frontend health requests → FastAPI backend
+      - type: rewrite
+        source: /health
+        destination: https://trailmind-backend.onrender.com/health
+
+      # React Router fallback
       - type: rewrite
         source: /*
         destination: /index.html
